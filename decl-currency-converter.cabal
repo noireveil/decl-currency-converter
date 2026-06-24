@@ -1,0 +1,11 @@
+cabal-version:      2.4
+name:               decl-currency-converter
+version:            0.1.0.0
+
+executable decl-currency-converter
+    main-is:          Main.hs
+    build-depends:    base,
+                      aeson,
+                      http-conduit,
+                      containers
+    default-language: Haskell2010
