@@ -1,27 +1,14 @@
 module Main where
 
-import Data.Char   (toUpper)
-import System.IO   (hFlush, stdout)
 import System.Exit (exitSuccess)
+import IOUtils     (getInputRaw, getInputClean)
+import Finansial   (menuMataUang)
 
 -- TODO: Uncomment saat modul lain selesai
-import Finansial hiding (getInputClean, getInputRaw)
 -- import Panjang
 
+-- | Alias untuk fungsi konversi (Higher-Order Function)
 type FungsiKonversi = Double -> Double
-
-getInputRaw :: String -> IO String
-getInputRaw promptText = do
-    putStr promptText
-    hFlush stdout
-    getLine
-
-getInputClean :: String -> IO String
-getInputClean promptText = do
-    putStr promptText
-    hFlush stdout
-    input <- getLine
-    return (map toUpper (filter (/= ' ') input))
 
 main :: IO ()
 main = do
@@ -64,8 +51,9 @@ prosesMenu _   = do
     putStrLn "\n  [!] Pilihan tidak valid. Silakan coba lagi."
     mainMenu
 
+-- | Konversi Batch (Eta-reduced map)
 batchKonversi :: FungsiKonversi -> [Double] -> [Double]
-batchKonversi f xs = map f xs
+batchKonversi = map
 
 menuBatch :: IO ()
 menuBatch = do

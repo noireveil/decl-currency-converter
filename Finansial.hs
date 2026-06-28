@@ -1,31 +1,13 @@
-module Finansial where
+module Finansial (MataUang(..), menuMataUang) where
 
-import Data.Char (toUpper)
-import System.IO (hFlush, stdout)
-
--- TODO (Integrator - Tiket 1): Hapus kedua fungsi di bawah ini setelah
--- merge. Fungsi ini duplikat dari Main.hs, hanya ada untuk keperluan
--- testing modul secara mandiri. Buat class utils sendiri aja biar bersih trus masukin kedua fungsi ini ke sana.
-getInputRaw :: String -> IO String
-getInputRaw promptText = do
-    putStr promptText
-    hFlush stdout
-    getLine
-
-getInputClean :: String -> IO String
-getInputClean promptText = do
-    putStr promptText
-    hFlush stdout
-    input <- getLine
-    return (map toUpper (filter (/= ' ') input))
+import IOUtils (getInputRaw, getInputClean)
 
 -- | Tipe data untuk mata uang yang didukung.
--- Tambah mata uang baru cukup di sini dan di 'kursKeIdr'.
 data MataUang
-    = USD   -- ^ US Dollar
-    | EUR   -- ^ Euro
-    | SGD   -- ^ Singapore Dollar
-    | IDR   -- ^ Indonesian Rupiah
+    = USD
+    | EUR
+    | SGD
+    | IDR
     deriving (Show, Eq, Enum, Bounded)
 
 -- | Representasi sebuah entri kurs: nama lengkap dan nilai terhadap IDR.
@@ -35,8 +17,7 @@ data EntriKurs = EntriKurs
     , nilaiKeIdr :: Double
     } deriving (Show)
 
--- | Tabel kurs terpusat. Semua konversi mengacu ke sini.
--- Untuk update kurs atau tambah mata uang baru, cukup edit di sini.
+-- | Tabel kurs terpusat. Semua konversi mengacu ke sini (Offline-First).
 daftarKurs :: [EntriKurs]
 daftarKurs =
     [ EntriKurs USD "US Dollar"          16200.0
@@ -46,7 +27,6 @@ daftarKurs =
     ]
 
 -- | Cari entri kurs berdasarkan simbol menggunakan filter (Chapter 5).
--- Mengembalikan Nothing jika mata uang tidak ditemukan.
 cariKurs :: MataUang -> Maybe EntriKurs
 cariKurs target =
     case filter (\e -> simbolKurs e == target) daftarKurs of
@@ -54,13 +34,11 @@ cariKurs target =
         (x:_) -> Just x
 
 -- | Konversi nilai antar dua mata uang melalui IDR sebagai perantara.
--- Mengembalikan Nothing jika salah satu mata uang tidak ada di daftar.
 konversiMataUang :: MataUang -> MataUang -> Double -> Maybe Double
 konversiMataUang dari ke nilai = do
     entryDari <- cariKurs dari
     entryKe   <- cariKurs ke
-    let nilaiDalamIdr = nilai * nilaiKeIdr entryDari
-    return (nilaiDalamIdr / nilaiKeIdr entryKe)
+    return ((nilai * nilaiKeIdr entryDari) / nilaiKeIdr entryKe)
 
 -- | Parsing input string menjadi MataUang menggunakan pattern matching.
 parseMataUang :: String -> Maybe MataUang
@@ -103,7 +81,7 @@ prosesKonversi inputDari inputKe inputNilai =
             putStrLn $ "\n  [!] Mata uang '" ++ inputKe ++ "' tidak dikenali."
         (_, _, []) ->
             putStrLn "\n  [!] Jumlah yang dimasukkan bukan angka valid."
-        (Just dari, Just ke, ((nilai, _):_)) ->
+        (Just dari, Just ke, (nilai, _):_) ->
             case konversiMataUang dari ke nilai of
                 Nothing ->
                     putStrLn "\n  [!] Konversi gagal. Periksa kembali input Anda."
