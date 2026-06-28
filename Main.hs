@@ -5,7 +5,7 @@ import System.IO   (hFlush, stdout)
 import System.Exit (exitSuccess)
 
 -- TODO: Uncomment saat modul lain selesai
--- import Finansial
+import Finansial hiding (getInputClean, getInputRaw)
 -- import Panjang
 
 type FungsiKonversi = Double -> Double
@@ -133,9 +133,6 @@ celsiusKeKelvin x = x + 273.15
 
 kgKeGram :: FungsiKonversi
 kgKeGram x = x * 1000.0
-
-menuMataUang :: IO ()
-menuMataUang = putStrLn "\n  [STUB] Modul Mata Uang    - PIC: Faris  (Tiket 3)"
 
 menuPanjang :: IO ()
 menuPanjang = putStrLn "\n  [STUB] Modul Panjang      - PIC: Daffa  (Tiket 4)"
