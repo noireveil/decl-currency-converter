@@ -3,9 +3,7 @@ module Main where
 import System.Exit (exitSuccess)
 import IOUtils     (getInputRaw, getInputClean)
 import Finansial   (menuMataUang)
-
--- TODO: Uncomment saat modul lain selesai
--- import Panjang
+import Panjang (menuPanjang, konversiPanjang, Panjang(..))
 
 -- | Alias untuk fungsi konversi (Higher-Order Function)
 type FungsiKonversi = Double -> Double
@@ -121,9 +119,6 @@ celsiusKeKelvin x = x + 273.15
 
 kgKeGram :: FungsiKonversi
 kgKeGram x = x * 1000.0
-
-menuPanjang :: IO ()
-menuPanjang = putStrLn "\n  [STUB] Modul Panjang      - PIC: Daffa  (Tiket 4)"
 
 menuSuhu :: IO ()
 menuSuhu = putStrLn "\n  [STUB] Modul Suhu"
