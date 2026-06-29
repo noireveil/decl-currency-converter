@@ -2,29 +2,28 @@ module Panjang (Panjang(..), menuPanjang, konversiPanjang) where
 
 import IOUtils (getInputRaw, getInputClean)
 
--- | 1. Custom type
+-- | Tipe data untuk satuan Panjang.
 data Panjang = KM | Meter | CM | Mile deriving (Show, Eq)
 
--- | 2. Rumus konversi menggunakan Pattern Matching murni (Ch. 7)
--- Mengonversi input ke satuan dasar (Meter)
+-- | Konversi input ke satuan dasar (Meter).
 keMeter :: Double -> Panjang -> Double
 keMeter nilai KM    = nilai * 1000.0
 keMeter nilai Meter = nilai
 keMeter nilai CM    = nilai / 100.0
 keMeter nilai Mile  = nilai * 1609.344
 
--- Mengonversi dari satuan dasar (Meter) ke output tujuan
+-- | Konversi dari satuan dasar (Meter) ke output tujuan.
 dariMeter :: Double -> Panjang -> Double
 dariMeter nilai KM    = nilai / 1000.0
 dariMeter nilai Meter = nilai
 dariMeter nilai CM    = nilai * 100.0
 dariMeter nilai Mile  = nilai / 1609.344
 
--- Fungsi utama konversi
+-- | Fungsi utama konversi.
 konversiPanjang :: Panjang -> Panjang -> Double -> Double
 konversiPanjang dari ke nilai = dariMeter (keMeter nilai dari) ke
 
--- | Parsing input string menjadi tipe Panjang menggunakan Pattern Matching
+-- | Parsing input string menjadi tipe Panjang menggunakan Pattern Matching.
 parsePanjang :: String -> Maybe Panjang
 parsePanjang "KM"         = Just KM
 parsePanjang "KILOMETER"  = Just KM
@@ -36,7 +35,6 @@ parsePanjang "MILE"       = Just Mile
 parsePanjang "MIL"        = Just Mile
 parsePanjang _            = Nothing
 
--- | Tampilan UI Modul Panjang
 tampilkanDaftarSatuan :: IO ()
 tampilkanDaftarSatuan = do
     putStrLn "\n  Satuan panjang yang tersedia:"
@@ -47,7 +45,7 @@ tampilkanDaftarSatuan = do
     putStrLn "  [MILE]  Mile"
     putStrLn "  -------------------------"
 
--- | Menu yang akan dipanggil oleh Main.hs
+-- | Menu interaktif yang akan dipanggil oleh Main.hs
 menuPanjang :: IO ()
 menuPanjang = do
     putStrLn "\n========= KONVERSI SATUAN PANJANG ========="
@@ -57,7 +55,7 @@ menuPanjang = do
     inputNilai <- getInputRaw   "  Jumlah               > "
     prosesKonversiPanjang inputDari inputKe inputNilai
 
--- | Proses dan validasi seluruh input menggunakan pattern matching tuple
+-- | Proses dan validasi seluruh input menggunakan pattern matching tuple.
 prosesKonversiPanjang :: String -> String -> String -> IO ()
 prosesKonversiPanjang inputDari inputKe inputNilai =
     case (parsePanjang inputDari, parsePanjang inputKe, reads inputNilai) of
@@ -67,7 +65,7 @@ prosesKonversiPanjang inputDari inputKe inputNilai =
             putStrLn $ "\n  [!] Satuan panjang '" ++ inputKe ++ "' tidak dikenali."
         (_, _, []) ->
             putStrLn "\n  [!] Jumlah yang dimasukkan bukan angka valid."
-        (Just dari, Just ke, ((nilai, _):_)) ->
+        (Just dari, Just ke, (nilai, _):_) ->
             let hasil = konversiPanjang dari ke nilai
             in putStrLn $ "\n  Hasil: "
                        ++ show nilai  ++ " " ++ show dari

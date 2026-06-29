@@ -3,7 +3,7 @@ module Main where
 import System.Exit (exitSuccess)
 import IOUtils     (getInputRaw, getInputClean)
 import Finansial   (menuMataUang)
-import Panjang (menuPanjang, konversiPanjang, Panjang(..))
+import Panjang     (menuPanjang)
 
 -- | Alias untuk fungsi konversi (Higher-Order Function)
 type FungsiKonversi = Double -> Double
