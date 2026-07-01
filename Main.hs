@@ -4,6 +4,8 @@ import System.Exit (exitSuccess)
 import IOUtils     (getInputRaw, getInputClean)
 import Finansial   (menuMataUang)
 import Panjang     (menuPanjang)
+import Suhu        (menuSuhu)
+import Berat       (menuBerat)
 
 -- | Alias untuk fungsi konversi (Higher-Order Function)
 type FungsiKonversi = Double -> Double
@@ -119,12 +121,6 @@ celsiusKeKelvin x = x + 273.15
 
 kgKeGram :: FungsiKonversi
 kgKeGram x = x * 1000.0
-
-menuSuhu :: IO ()
-menuSuhu = putStrLn "\n  [STUB] Modul Suhu"
-
-menuBerat :: IO ()
-menuBerat = putStrLn "\n  [STUB] Modul Berat"
 
 menuVolume :: IO ()
 menuVolume = putStrLn "\n  [STUB] Modul Volume"
